@@ -228,10 +228,13 @@ class WP2Shell:
             raise RuntimeError("could not resolve posts table")
         prefix = posts_table[:-5]
 
+        # Kept out of the f-string below: a backslash inside an f-string
+        # expression is a syntax error before Python 3.12.
+        admin_marker = 's:13:"administrator";b:1;'
         admin_id = int(self.read_scalar(
             f"SELECT u.ID FROM `{prefix}users` u JOIN `{prefix}usermeta` m ON m.user_id=u.ID "
             f"WHERE m.meta_key={self._hex(prefix + 'capabilities')} "
-            f"AND INSTR(m.meta_value,{self._hex('s:13:\"administrator\";b:1;')})>0 "
+            f"AND INSTR(m.meta_value,{self._hex(admin_marker)})>0 "
             "ORDER BY u.ID LIMIT 1"))
         if admin_id < 1:
             raise RuntimeError("could not locate an administrator")
