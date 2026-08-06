@@ -8,7 +8,7 @@ Public scripts and supporting files for hands-on security labs at
 | Path | Used by | What it is |
 | --- | --- | --- |
 | `wordpress/wp2shell_rce/wp2shell.py` | Hacking WordPress with wp2shell (pre-auth SQLi to RCE)
-| `azure/learn-in-30-days/day-2/resume-template/index.html` | Learn Azure in 30 Days, Day 2 | Self-contained Azure resume template |
+| `azure/learn-in-30-days/progress-site/` | Learn Azure in 30 Days | Multi-page progress-site starter and daily entries |
 
 ## A note on usage
 
