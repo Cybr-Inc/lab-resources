@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A cloud resume and project log for the Cybr Learn Azure in 30 Days course.">
+  <title>YOUR NAME | Azure Cloud Resume</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #142033;
+      --muted: #5d6b7e;
+      --paper: #fffdfa;
+      --canvas: #e9f0f8;
+      --blue: #0067b8;
+      --blue-bright: #1689df;
+      --blue-pale: #dceeff;
+      --navy: #0c2948;
+      --line: #cbd8e6;
+      --green: #097969;
+      --shadow: 0 24px 70px rgba(25, 55, 88, 0.18);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-width: 20rem;
+      margin: 0;
+      background:
+        radial-gradient(circle at 8% 5%, rgba(22, 137, 223, 0.2), transparent 28rem),
+        linear-gradient(rgba(12, 41, 72, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(12, 41, 72, 0.04) 1px, transparent 1px),
+        var(--canvas);
+      background-size: auto, 2rem 2rem, 2rem 2rem, auto;
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      width: min(72rem, calc(100% - 2rem));
+      margin: 3rem auto;
+      overflow: hidden;
+      background: var(--paper);
+      border: 1px solid rgba(12, 41, 72, 0.14);
+      border-radius: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+
+    .masthead {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 2rem;
+      align-items: end;
+      padding: 4rem;
+      overflow: hidden;
+      color: white;
+      background: var(--navy);
+    }
+
+    .masthead::before {
+      position: absolute;
+      top: -9rem;
+      right: -6rem;
+      width: 24rem;
+      height: 24rem;
+      border: 4rem solid rgba(22, 137, 223, 0.18);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .masthead::after {
+      position: absolute;
+      right: 16rem;
+      bottom: -7rem;
+      width: 13rem;
+      height: 13rem;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .identity,
+    .release {
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      margin: 0 0 0.75rem;
+      color: #8dcaff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      max-width: 14ch;
+      margin: 0;
+      font-size: clamp(3rem, 8vw, 6.4rem);
+      font-weight: 850;
+      letter-spacing: -0.065em;
+      line-height: 0.92;
+    }
+
+    .role {
+      margin: 1.4rem 0 0;
+      color: #d8e8f7;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+    }
+
+    .release {
+      min-width: 13rem;
+      padding: 1.1rem 1.25rem;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 0.8rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .release-label {
+      display: block;
+      margin-bottom: 0.2rem;
+      color: #8dcaff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .release-value {
+      font-weight: 800;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 18rem minmax(0, 1fr);
+    }
+
+    .sidebar {
+      padding: 3rem 2.25rem;
+      background: #f1f6fb;
+      border-right: 1px solid var(--line);
+    }
+
+    .content {
+      padding: 3rem 3.5rem 4rem;
+    }
+
+    section + section {
+      margin-top: 3rem;
+    }
+
+    h2 {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+      margin: 0 0 1.1rem;
+      color: var(--navy);
+      font-size: 1rem;
+      font-weight: 850;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    h2::before {
+      width: 1.8rem;
+      height: 0.25rem;
+      background: var(--blue-bright);
+      border-radius: 99px;
+      content: "";
+    }
+
+    .sidebar h2::before {
+      width: 1.15rem;
+    }
+
+    .summary {
+      max-width: 45rem;
+      margin: 0;
+      color: #344257;
+      font-size: 1.12rem;
+      line-height: 1.75;
+    }
+
+    .detail-list,
+    .skill-list,
+    .project-list {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    .detail-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .detail-label {
+      display: block;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .detail-value {
+      display: block;
+      margin-top: 0.1rem;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+      text-decoration-color: #8dcaff;
+      text-underline-offset: 0.2rem;
+    }
+
+    .skill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .skill-list li {
+      padding: 0.35rem 0.65rem;
+      color: var(--blue);
+      background: var(--blue-pale);
+      border: 1px solid #bddcf7;
+      border-radius: 0.35rem;
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .project-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .project {
+      display: grid;
+      grid-template-columns: 7rem minmax(0, 1fr);
+      gap: 1.5rem;
+      padding: 1.5rem;
+      background: white;
+      border: 1px solid var(--line);
+      border-radius: 0.8rem;
+      box-shadow: 0 8px 24px rgba(25, 55, 88, 0.07);
+    }
+
+    .project-status {
+      align-self: start;
+      padding: 0.45rem 0.7rem;
+      color: var(--blue);
+      background: var(--blue-pale);
+      border-radius: 99px;
+      font-size: 0.72rem;
+      font-weight: 850;
+      letter-spacing: 0.06em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .project h3 {
+      margin: 0;
+      color: var(--navy);
+      font-size: 1.08rem;
+    }
+
+    .project p {
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+    }
+
+    .progress-card {
+      position: relative;
+      padding: 1.75rem 1.75rem 1.75rem 2rem;
+      overflow: hidden;
+      color: white;
+      background: linear-gradient(120deg, var(--blue), #004f8f);
+      border-radius: 0.9rem;
+    }
+
+    .progress-card::after {
+      position: absolute;
+      right: -2rem;
+      bottom: -3.5rem;
+      width: 10rem;
+      height: 10rem;
+      border: 1.5rem solid rgba(255, 255, 255, 0.08);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .progress-card strong,
+    .progress-card span {
+      position: relative;
+      z-index: 1;
+      display: block;
+    }
+
+    .progress-card strong {
+      font-size: 1.1rem;
+    }
+
+    .progress-card span {
+      margin-top: 0.35rem;
+      color: #dceeff;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 1.25rem 3.5rem;
+      color: #d8e8f7;
+      background: var(--navy);
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 48rem) {
+      .page {
+        width: min(100% - 1rem, 42rem);
+        margin: 0.5rem auto;
+        border-radius: 0.8rem;
+      }
+
+      .masthead {
+        grid-template-columns: 1fr;
+        padding: 3rem 1.5rem 2rem;
+      }
+
+      .release {
+        width: fit-content;
+      }
+
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        padding: 2rem 1.5rem;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .content {
+        padding: 2.5rem 1.5rem 3rem;
+      }
+
+      .project {
+        grid-template-columns: 1fr;
+      }
+
+      .project-status {
+        width: fit-content;
+      }
+
+      footer {
+        flex-direction: column;
+        padding: 1.25rem 1.5rem;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .page {
+        width: 100%;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .masthead,
+      footer,
+      .progress-card {
+        print-color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+  <article class="page">
+    <header class="masthead">
+      <div class="identity">
+        <p class="eyebrow">Azure cloud resume</p>
+        <!-- Replace YOUR NAME with the name that you want to show publicly. -->
+        <h1>YOUR NAME</h1>
+        <p class="role">Junior cloud analyst building secure systems in Azure</p>
+      </div>
+      <div class="release" aria-label="Resume release status">
+        <span class="release-label">Current release</span>
+        <span class="release-value">Release status: DRAFT</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" aria-label="Resume details">
+        <section>
+          <h2>Contact</h2>
+          <ul class="detail-list">
+            <li>
+              <span class="detail-label">Location</span>
+              <span class="detail-value">Your city or time zone</span>
+            </li>
+            <li>
+              <span class="detail-label">Email</span>
+              <span class="detail-value">Add an email if you want to share one</span>
+            </li>
+            <li>
+              <span class="detail-label">Profile</span>
+              <span class="detail-value">Add a LinkedIn or GitHub link</span>
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Core skills</h2>
+          <ul class="skill-list">
+            <li>Azure portal</li>
+            <li>Resource groups</li>
+            <li>Blob Storage</li>
+            <li>Azure RBAC</li>
+            <li>Activity logs</li>
+            <li>Cloud security</li>
+          </ul>
+        </section>
+
+        <section>
+          <h2>Focus</h2>
+          <p>I build cloud projects, record the result, and improve their security one release at a time.</p>
+        </section>
+      </aside>
+
+      <main class="content">
+        <section>
+          <h2>Profile</h2>
+          <p class="summary">
+            I am building practical Azure skills through hands-on projects. This resume records what I shipped, how I built it, and what I learned.
+          </p>
+        </section>
+
+        <section>
+          <h2>Cloud progress</h2>
+          <div class="progress-card">
+            <strong>Week 1: In progress</strong>
+            <span>Azure foundations and a public progress site</span>
+          </div>
+        </section>
+
+        <section>
+          <h2>Project log</h2>
+          <ol class="project-list">
+            <li class="project">
+              <span class="project-status">Day 1</span>
+              <div>
+                <h3>Explored my first Azure environment</h3>
+                <p>Created storage, worked with resource groups, and found my actions in the activity log.</p>
+              </div>
+            </li>
+            <li class="project">
+              <span class="project-status">Day 2</span>
+              <div>
+                <h3>Published this resume with Azure Storage</h3>
+                <p>Enabled static website hosting, uploaded the site files, and shipped an updated release.</p>
+              </div>
+            </li>
+          </ol>
+        </section>
+      </main>
+    </div>
+
+    <footer>
+      <span>Built during Cybr's Learn Azure in 30 Days course</span>
+      <span>Hosted with Azure Storage</span>
+    </footer>
+  </article>
+</body>
+</html>
