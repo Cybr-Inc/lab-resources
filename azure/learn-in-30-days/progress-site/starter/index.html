@@ -3,63 +3,60 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A project log for the Cybr Learn Azure in 30 Days course.">
-  <title>YOUR NAME | Azure Progress Site</title>
+  <meta name="description" content="Short notes from my Learn Azure in 30 Days projects.">
+  <title>YOUR NAME | Azure notes</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="site-shell">
-    <header class="site-header">
-      <a class="brand" href="index.html">YOUR NAME / Azure Progress</a>
-      <nav class="site-nav" aria-label="Main navigation">
-        <a href="index.html" aria-current="page">Home</a>
-        <a href="day-01.html">Day 1</a>
-      </nav>
-    </header>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-id" href="index.html" aria-label="Azure notes home">
+        <span class="avatar" aria-hidden="true">az</span>
+        <span><strong>YOUR NAME</strong> / azure-notes</span>
+      </a>
+      <span class="course-label">Learn Azure in 30 Days</span>
+    </div>
+  </header>
 
-    <main>
-      <section class="hero">
-        <div class="hero-copy">
-          <p class="eyebrow">Learn Azure in 30 Days</p>
-          <h1>YOUR NAME</h1>
-          <p class="hero-summary">
-            I am building practical Azure skills one project at a time. This site records what I shipped and what I learned.
-          </p>
-        </div>
-        <div class="hero-status" aria-label="Current course progress">
-          <span class="status-label">Current progress</span>
-          <span class="status-value">Week 1: In progress</span>
-        </div>
-      </section>
+  <main class="page">
+    <section class="intro" aria-labelledby="page-title">
+      <p class="eyebrow">Personal learning log</p>
+      <h1 id="page-title">Azure notes</h1>
+      <p class="intro-copy">Small write-ups about what I built, what worked, and what I learned about cloud security.</p>
+      <p class="progress"><span class="status-dot" aria-hidden="true"></span>Week 1: In progress</p>
+    </section>
 
-      <section class="content" aria-labelledby="entries-heading">
-        <h2 class="section-heading" id="entries-heading">Course entries</h2>
-        <p class="section-intro">
-          Each course day adds a page to this site. Open an entry to see the project result, evidence, and security lesson.
-        </p>
+    <section class="post-list" aria-labelledby="posts-title">
+      <div class="list-header">
+        <h2 id="posts-title">Posts</h2>
+        <span>2 entries</span>
+      </div>
 
-        <div class="entry-grid">
-          <a class="entry-card" href="day-01.html">
-            <span class="entry-number">Day 1</span>
-            <h2>Explored my first Azure environment</h2>
-            <p>Created storage, worked with resource groups, and found my actions in the activity log.</p>
-            <span class="entry-state">Entry status: PUBLISHED</span>
-          </a>
+      <a class="entry-card" href="day-01.html">
+        <span class="entry-number" aria-hidden="true">01</span>
+        <span class="entry-content">
+          <strong>Explored my first Azure environment</strong>
+          <span>Created storage, worked with resource groups, and found my actions in the activity log.</span>
+          <span class="entry-tags"><span>Azure Portal</span><span>Storage</span><span>RBAC</span></span>
+        </span>
+        <span class="entry-state">Entry status: PUBLISHED</span>
+      </a>
 
-          <a class="entry-card is-draft" href="day-02.html">
-            <span class="entry-number">Day 2</span>
-            <h2>Day 2: In progress</h2>
-            <p>This entry will record my first Azure website release.</p>
-            <span class="entry-state">Entry status: DRAFT</span>
-          </a>
-        </div>
-      </section>
-    </main>
+      <a class="entry-card is-draft" href="day-02.html">
+        <span class="entry-number" aria-hidden="true">02</span>
+        <span class="entry-content">
+          <strong>Day 2: In progress</strong>
+          <span>This post will record my first Azure website release.</span>
+          <span class="entry-tags"><span>Azure Storage</span><span>Static website</span></span>
+        </span>
+        <span class="entry-state">Entry status: DRAFT</span>
+      </a>
+    </section>
+  </main>
 
-    <footer class="site-footer">
-      <span>Built during Cybr's Learn Azure in 30 Days course</span>
-      <span>Hosted with Azure Storage</span>
-    </footer>
-  </div>
+  <footer class="site-footer">
+    <span>YOUR NAME / azure-notes</span>
+    <span>Hosted with Azure Storage</span>
+  </footer>
 </body>
 </html>

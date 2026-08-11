@@ -3,61 +3,66 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Day 1 of my Azure progress site.">
+  <meta name="description" content="Day 1 of my Azure learning notes.">
   <title>Day 1: Explored Azure | YOUR NAME</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="site-shell">
-    <header class="site-header">
-      <a class="brand" href="index.html">YOUR NAME / Azure Progress</a>
-      <nav class="site-nav" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="day-01.html" aria-current="page">Day 1</a>
-      </nav>
-    </header>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-id" href="index.html" aria-label="Azure notes home">
+        <span class="avatar" aria-hidden="true">az</span>
+        <span><strong>YOUR NAME</strong> / azure-notes</span>
+      </a>
+      <a class="all-posts" href="index.html">All posts</a>
+    </div>
+  </header>
 
-    <main>
-      <header class="entry-hero">
+  <main class="page page-post">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="index.html">azure-notes</a><span>/</span><span>day-01</span>
+    </nav>
+
+    <article class="post">
+      <header class="post-header">
         <p class="eyebrow">Day 1 / Azure foundations</p>
         <h1>Explored my first Azure environment</h1>
+        <p class="post-summary">My first look at Azure resource groups, storage, permissions, and the activity log.</p>
+        <div class="post-meta">
+          <span class="published-badge">Published</span>
+          <span>Azure Portal</span>
+          <span>5 minute read</span>
+        </div>
       </header>
 
-      <div class="entry-layout">
-        <article class="entry-body">
-          <section>
-            <h2>What I achieved</h2>
-            <p>I created a storage account, uploaded a file, and used the Azure portal to explore my resources.</p>
-          </section>
+      <div class="post-body">
+        <h2>What I achieved</h2>
+        <p>I created a storage account, uploaded a file, and used the Azure portal to explore my resources.</p>
 
-          <section>
-            <h2>Evidence</h2>
-            <p>I found the new storage account and its activity-log record inside the resource group that I could manage.</p>
-          </section>
+        <h2>Evidence</h2>
+        <p>I found the storage account and its activity-log record inside the resource group that I could manage.</p>
 
-          <section>
-            <h2>Security lesson</h2>
-            <p>Azure roles apply at a scope. My permissions changed when I moved between resource groups.</p>
-          </section>
+        <blockquote>
+          Azure showed only the resource groups that my account had permission to read.
+        </blockquote>
 
-          <a class="back-link" href="index.html">Return to all course entries</a>
-        </article>
+        <h2>Security lesson</h2>
+        <p>Azure roles apply at a scope. My permissions changed when I moved between resource groups.</p>
 
-        <aside class="entry-aside" aria-label="Entry details">
-          <h2>Entry details</h2>
-          <ul class="fact-list">
-            <li><span>Status</span><strong>Entry status: PUBLISHED</strong></li>
-            <li><span>Service</span><strong>Azure Storage</strong></li>
-            <li><span>Focus</span><strong>Portal and access</strong></li>
-          </ul>
-        </aside>
+        <dl class="post-facts">
+          <div><dt>Service</dt><dd>Azure Storage</dd></div>
+          <div><dt>Focus</dt><dd>Portal and access</dd></div>
+          <div><dt>Status</dt><dd>Entry status: PUBLISHED</dd></div>
+        </dl>
       </div>
-    </main>
+    </article>
 
-    <footer class="site-footer">
-      <span>Built during Cybr's Learn Azure in 30 Days course</span>
-      <span>Day 1 entry</span>
-    </footer>
-  </div>
+    <a class="back-link" href="index.html">Back to all posts</a>
+  </main>
+
+  <footer class="site-footer">
+    <span>YOUR NAME / azure-notes</span>
+    <span>Day 1</span>
+  </footer>
 </body>
 </html>

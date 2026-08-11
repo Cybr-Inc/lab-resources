@@ -3,61 +3,62 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A new entry in my Azure progress site.">
+  <meta name="description" content="A new post in my Azure learning notes.">
   <title>COURSE_DAY_TITLE | YOUR NAME</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="site-shell">
-    <header class="site-header">
-      <a class="brand" href="index.html">YOUR NAME / Azure Progress</a>
-      <nav class="site-nav" aria-label="Main navigation">
-        <a href="index.html">Home</a>
-        <a href="day-01.html">Day 1</a>
-      </nav>
-    </header>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="site-id" href="index.html" aria-label="Azure notes home">
+        <span class="avatar" aria-hidden="true">az</span>
+        <span><strong>YOUR NAME</strong> / azure-notes</span>
+      </a>
+      <a class="all-posts" href="index.html">All posts</a>
+    </div>
+  </header>
 
-    <main>
-      <header class="entry-hero">
-        <p class="eyebrow">New course entry</p>
+  <main class="page page-post">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <a href="index.html">azure-notes</a><span>/</span><span>new-post</span>
+    </nav>
+
+    <article class="post">
+      <header class="post-header">
+        <p class="eyebrow">New course post</p>
         <h1>COURSE_DAY_TITLE</h1>
+        <p class="post-summary">ACHIEVEMENT_SUMMARY</p>
+        <div class="post-meta">
+          <span class="draft-badge">Entry status: DRAFT</span>
+          <span>AZURE_SERVICE</span>
+          <span>COURSE_TOPIC</span>
+        </div>
       </header>
 
-      <div class="entry-layout">
-        <article class="entry-body">
-          <section>
-            <h2>What I achieved</h2>
-            <p>ACHIEVEMENT_SUMMARY</p>
-          </section>
+      <div class="post-body">
+        <h2>What I achieved</h2>
+        <p>ACHIEVEMENT_SUMMARY</p>
 
-          <section>
-            <h2>Evidence</h2>
-            <p>EVIDENCE_NOTE</p>
-          </section>
+        <h2>Evidence</h2>
+        <p>EVIDENCE_NOTE</p>
 
-          <section>
-            <h2>Security lesson</h2>
-            <p>SECURITY_LESSON</p>
-          </section>
+        <h2>Security lesson</h2>
+        <p>SECURITY_LESSON</p>
 
-          <a class="back-link" href="index.html">Return to all course entries</a>
-        </article>
-
-        <aside class="entry-aside" aria-label="Entry details">
-          <h2>Entry details</h2>
-          <ul class="fact-list">
-            <li><span>Status</span><strong>Entry status: DRAFT</strong></li>
-            <li><span>Service</span><strong>AZURE_SERVICE</strong></li>
-            <li><span>Focus</span><strong>COURSE_TOPIC</strong></li>
-          </ul>
-        </aside>
+        <dl class="post-facts">
+          <div><dt>Service</dt><dd>AZURE_SERVICE</dd></div>
+          <div><dt>Focus</dt><dd>COURSE_TOPIC</dd></div>
+          <div><dt>Status</dt><dd>Entry status: DRAFT</dd></div>
+        </dl>
       </div>
-    </main>
+    </article>
 
-    <footer class="site-footer">
-      <span>Built during Cybr's Learn Azure in 30 Days course</span>
-      <span>New course entry</span>
-    </footer>
-  </div>
+    <a class="back-link" href="index.html">Back to all posts</a>
+  </main>
+
+  <footer class="site-footer">
+    <span>YOUR NAME / azure-notes</span>
+    <span>New post</span>
+  </footer>
 </body>
 </html>
