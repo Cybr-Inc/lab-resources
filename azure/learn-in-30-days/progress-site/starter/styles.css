@@ -94,6 +94,13 @@ a:hover {
   font-size: 0.875rem;
 }
 
+.header-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
 .page {
   min-height: calc(100vh - 9rem);
   padding-block: 3.5rem 5rem;
@@ -383,6 +390,17 @@ blockquote {
 
   .course-label,
   .all-posts {
+    padding-left: 2.65rem;
+  }
+
+  .header-links {
+    display: grid;
+    gap: 0.35rem;
+    justify-content: start;
+  }
+
+  .header-links .course-label,
+  .header-links .all-posts {
     padding-left: 2.65rem;
   }
 

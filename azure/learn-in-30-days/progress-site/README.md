@@ -8,4 +8,4 @@ The learner keeps the complete site folder. After Day 2, the learner publishes u
 
 The public files are not an access-control boundary. A learner can browse ahead in GitHub.
 
-The source files are under design review. The ZIP is intentionally absent until the design is approved.
+The approved starter is packaged as `azure-progress-site-starter.zip`. Its five files sit at the ZIP root so learners can extract and upload them directly.
