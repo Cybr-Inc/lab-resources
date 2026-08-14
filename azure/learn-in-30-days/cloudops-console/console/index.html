@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CloudOps Console</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<header class="topbar">
+  <span class="brand">CloudOps Console</span>
+  <span class="org">Contoso internal operations</span>
+</header>
+<main>
+  <section class="cards">
+    <article class="card">
+      <h2>Progress site</h2>
+      <p class="status status-ok">Online</p>
+      <p>The public progress site built in week one.</p>
+    </article>
+    <article class="card">
+      <h2>Operations agent</h2>
+      <p class="status status-off">Not connected</p>
+      <p>The CloudOps agent connects to this console later in the course.</p>
+    </article>
+  </section>
+  <section class="card launch">
+    <h2>Launch code</h2>
+    <p id="launch-code" class="code code-pending">Launch code not installed.</p>
+    <p class="note">The console reads <code>flag.txt</code> from the site root and shows it here.</p>
+  </section>
+</main>
+<footer class="footer">CloudOps Console &middot; Contoso &middot; Internal use only</footer>
+<script src="app.js"></script>
+</body>
+</html>
