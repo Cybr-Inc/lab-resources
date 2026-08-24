@@ -147,12 +147,23 @@
       send.textContent = "Sending";
 
       try {
-        const response = await fetch("/api/chat", {
+        const options = {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ message: text })
-        });
-        const result = await response.json();
+        };
+        let response = await fetch("/api/chat", options);
+        if (response.status >= 500) {
+          response = await fetch("/api/chat", options);
+        }
+
+        const responseBody = await response.text();
+        let result;
+        try {
+          result = JSON.parse(responseBody);
+        } catch {
+          throw new Error(response.ok ? "Agent API returned an invalid response" : responseBody || "Agent API unavailable");
+        }
         if (!response.ok) throw new Error(result.error || "Agent API unavailable");
 
         addMessage(result.reply, "agent");
