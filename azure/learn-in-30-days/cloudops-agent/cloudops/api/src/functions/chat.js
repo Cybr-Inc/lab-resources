@@ -19,6 +19,31 @@ const TOOL_HANDLERS = {
   get_runbook: getRunbook
 };
 
+const USERNAME_CLAIM_TYPES = new Set([
+  "preferred_username",
+  "upn",
+  "email",
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
+  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn"
+]);
+
+function isAllowedPrincipal(principal) {
+  const allowed = process.env.ALLOWED_USER_NAME?.trim().toLowerCase();
+  if (!allowed) return false;
+
+  const usernames = [];
+  if (typeof principal?.userDetails === "string") {
+    usernames.push(principal.userDetails);
+  }
+  for (const claim of principal?.claims || []) {
+    if (USERNAME_CLAIM_TYPES.has(claim.typ) && typeof claim.val === "string") {
+      usernames.push(claim.val);
+    }
+  }
+
+  return usernames.some((username) => username.trim().toLowerCase() === allowed);
+}
+
 const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 async function createResponse(body) {
@@ -93,8 +118,11 @@ app.http("chat", {
     }
 
     const principal = JSON.parse(Buffer.from(encodedPrincipal, "base64").toString("utf8"));
-    if (principal.userDetails.toLowerCase() !== process.env.ALLOWED_USER_NAME.toLowerCase()) {
-      return { status: 403, jsonBody: { error: "This account is not authorized" } };
+    if (!isAllowedPrincipal(principal)) {
+      return {
+        status: 403,
+        jsonBody: { error: "The signed-in Microsoft account does not match the lab account" }
+      };
     }
 
     let body;
@@ -117,3 +145,5 @@ app.http("chat", {
     }
   }
 });
+
+module.exports = { isAllowedPrincipal };
