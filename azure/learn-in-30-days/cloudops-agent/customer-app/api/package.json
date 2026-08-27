@@ -1,0 +1,9 @@
+{
+  "name": "customer-api-release-42",
+  "version": "42.0.0",
+  "private": true,
+  "main": "src/functions/*.js",
+  "dependencies": {
+    "@azure/functions": "4.16.2"
+  }
+}

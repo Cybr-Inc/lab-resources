@@ -1,0 +1,11 @@
+{
+  "name": "cloudops-agent-api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/functions/*.js",
+  "dependencies": {
+    "@azure/ai-projects": "2.5.0",
+    "@azure/functions": "4.16.2",
+    "@azure/identity": "4.13.2"
+  }
+}
