@@ -25,39 +25,54 @@ function getToken() {
 }
 
 async function configureAgent() {
-  const token = getToken();
-  const headers = { Authorization: `Bearer ${token}` };
-  const agentUrl = `${endpoint}/agents/${encodeURIComponent(definition.agentName)}`;
-  const existing = await fetch(`${agentUrl}?api-version=v1`, { headers });
+  const retryable = new Set([403, 404, 409, 429, 500, 502, 503]);
+  for (let attempt = 1; attempt <= 8; attempt += 1) {
+    const token = getToken();
+    const headers = { Authorization: `Bearer ${token}` };
+    const agentUrl = `${endpoint}/agents/${encodeURIComponent(definition.agentName)}`;
+    const existing = await fetch(`${agentUrl}?api-version=v1`, { headers });
 
-  if (!existing.ok && existing.status !== 404) {
-    throw new Error(`Agent lookup failed with HTTP ${existing.status}: ${await existing.text()}`);
-  }
-
-  const requestUrl = existing.ok
-    ? `${agentUrl}/versions?api-version=v1`
-    : `${endpoint}/agents?api-version=v1`;
-  const body = {
-    definition: {
-      kind: "prompt",
-      model: definition.model,
-      instructions: definition.instructions,
-      tools: definition.tools
+    if (!existing.ok && existing.status !== 404) {
+      const detail = await existing.text();
+      if (!retryable.has(existing.status) || attempt === 8) {
+        throw new Error(`Agent lookup failed with HTTP ${existing.status}: ${detail}`);
+      }
+      console.log(`Foundry is not ready (HTTP ${existing.status}). Retrying in 15 seconds.`);
+      await new Promise((resolve) => setTimeout(resolve, 15000));
+      continue;
     }
-  };
-  if (!existing.ok) body.name = definition.agentName;
 
-  const response = await fetch(requestUrl, {
-    method: "POST",
-    headers: { ...headers, "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  });
-  if (!response.ok) {
-    throw new Error(`Agent configuration failed with HTTP ${response.status}: ${await response.text()}`);
+    const requestUrl = existing.ok
+      ? `${agentUrl}/versions?api-version=v1`
+      : `${endpoint}/agents?api-version=v1`;
+    const body = {
+      definition: {
+        kind: "prompt",
+        model: definition.model,
+        instructions: definition.instructions,
+        tools: definition.tools
+      }
+    };
+    if (!existing.ok) body.name = definition.agentName;
+
+    const response = await fetch(requestUrl, {
+      method: "POST",
+      headers: { ...headers, "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
+    if (response.ok) {
+      const agent = await response.json();
+      console.log(`Configured ${agent.name} version ${agent.version} with ${definition.tools.length} tools.`);
+      return;
+    }
+
+    const detail = await response.text();
+    if (!retryable.has(response.status) || attempt === 8) {
+      throw new Error(`Agent configuration failed with HTTP ${response.status}: ${detail}`);
+    }
+    console.log(`Foundry is not ready (HTTP ${response.status}). Retrying in 15 seconds.`);
+    await new Promise((resolve) => setTimeout(resolve, 15000));
   }
-
-  const agent = await response.json();
-  console.log(`Configured ${agent.name} version ${agent.version} with ${definition.tools.length} tools.`);
 }
 
 configureAgent().catch((error) => {
