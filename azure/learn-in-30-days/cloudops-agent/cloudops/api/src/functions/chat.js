@@ -65,8 +65,11 @@ function outputText(response) {
     .map((item) => item.text)
     .join("\n")
     .trim();
-  const words = text.split(/\s+/).filter(Boolean);
-  return words.slice(0, 180).join(" ");
+  const words = [...text.matchAll(/\S+/g)];
+  if (words.length <= 180) return text;
+
+  const lastWord = words[179];
+  return text.slice(0, lastWord.index + lastWord[0].length).trimEnd();
 }
 
 async function runAgent(message) {
