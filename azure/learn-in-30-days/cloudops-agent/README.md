@@ -26,12 +26,6 @@ The application-status tool accepts an application name from a fixed enum. The
 server maps that name to an environment-specific URL. The model cannot provide
 an arbitrary URL.
 
-## Intentional release defect
-
-The customer API release expects `ORDERS_API_ENDPOINT`. The deployed application
-setting is named `ORDER_API_ENDPOINT`. As a result, `/api/customer` and
-`/api/status` return HTTP 503.
-
-The status response includes setting names but never their values. Replacing
-`ORDERS_API_ENDPOINT` with `ORDER_API_ENDPOINT` in
-`customer-app/api/src/functions/customer.js` repairs the release.
+The customer application supplies the incident target for the lab. Follow the
+lab guide before you examine its source so that you can investigate the runtime
+evidence first.
