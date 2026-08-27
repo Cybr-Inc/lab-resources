@@ -26,6 +26,14 @@ The application-status tool accepts an application name from a fixed enum. The
 server maps that name to an environment-specific URL. The model cannot provide
 an arbitrary URL.
 
+The fixed map limits requests through the tool. It does not make the target
+private. This lab keeps the customer status endpoint and runbook container
+public so that learners can examine the complete request path.
+
+The customer status endpoint reports its current release settings. It does not
+call the sample orders dependency. Thus, a healthy result proves that the
+required server setting exists, not that the downstream service is available.
+
 The customer application supplies the incident target for the lab. Follow the
 lab guide before you examine its source so that you can investigate the runtime
 evidence first.

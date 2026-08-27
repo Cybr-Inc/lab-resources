@@ -24,10 +24,10 @@ async function getApplicationStatus({ application }) {
       : { error: (await response.text()).slice(0, 500) };
 
     return {
+      ...body,
       observed: true,
       application,
-      httpStatus: response.status,
-      ...body
+      httpStatus: response.status
     };
   } catch (error) {
     return { observed: false, application, error: error.message };
