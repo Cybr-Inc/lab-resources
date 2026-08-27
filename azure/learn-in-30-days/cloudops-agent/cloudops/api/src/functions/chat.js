@@ -14,10 +14,10 @@ const openai = project.getOpenAIClient({
   azureConfig: { allowPreview: true, agentName: process.env.FOUNDRY_AGENT_NAME }
 });
 
-const TOOL_HANDLERS = {
-  get_application_status: getApplicationStatus,
-  get_runbook: getRunbook
-};
+const TOOL_HANDLERS = new Map([
+  ["get_application_status", getApplicationStatus],
+  ["get_runbook", getRunbook]
+]);
 
 const USERNAME_CLAIM_TYPES = new Set([
   "preferred_username",
@@ -85,12 +85,13 @@ async function runAgent(message) {
     const toolOutputs = await Promise.all(calls.map(async (call) => {
       let args;
       try {
-        args = JSON.parse(call.arguments);
+        const parsed = JSON.parse(call.arguments);
+        args = parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
       } catch {
         args = {};
       }
 
-      const handler = TOOL_HANDLERS[call.name];
+      const handler = TOOL_HANDLERS.get(call.name);
       const result = handler
         ? await handler(args)
         : { error: "Unsupported function" };

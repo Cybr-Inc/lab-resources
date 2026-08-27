@@ -1,9 +1,9 @@
-const APPLICATIONS = {
-  "customer-api": () => process.env.CUSTOMER_API_STATUS_URL
-};
+const APPLICATIONS = new Map([
+  ["customer-api", () => process.env.CUSTOMER_API_STATUS_URL]
+]);
 
 async function getApplicationStatus({ application }) {
-  const getUrl = APPLICATIONS[application];
+  const getUrl = APPLICATIONS.get(application);
   if (!getUrl) {
     return { observed: false, error: "Application is not approved" };
   }

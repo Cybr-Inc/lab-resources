@@ -1,11 +1,11 @@
-const RUNBOOK_FILES = {
-  "api-503": "customer-api-503.md",
-  "sign-in": "entra-sign-in-failure.md",
-  "blob-upload": "storage-upload-failure.md"
-};
+const RUNBOOK_FILES = new Map([
+  ["api-503", "customer-api-503.md"],
+  ["sign-in", "entra-sign-in-failure.md"],
+  ["blob-upload", "storage-upload-failure.md"]
+]);
 
 async function getRunbook({ category }) {
-  const fileName = RUNBOOK_FILES[category];
+  const fileName = RUNBOOK_FILES.get(category);
   if (!fileName) {
     return { found: false, error: "Unknown runbook category" };
   }
