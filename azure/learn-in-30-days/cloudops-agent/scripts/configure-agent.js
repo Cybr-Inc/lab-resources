@@ -62,7 +62,8 @@ async function configureAgent() {
     });
     if (response.ok) {
       const agent = await response.json();
-      console.log(`Configured ${agent.name} version ${agent.version} with ${definition.tools.length} tools.`);
+      const version = agent.version ?? agent.versions?.latest?.version;
+      console.log(`Configured ${agent.name} version ${version} with ${definition.tools.length} tools.`);
       return;
     }
 
