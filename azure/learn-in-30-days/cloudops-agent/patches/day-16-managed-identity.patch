@@ -1,18 +1,18 @@
-diff --git a/cloudops/api/src/azure-credential.js b/cloudops/api/src/azure-credential.js
+diff --git a/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/azure-credential.js b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/azure-credential.js
 new file mode 100644
 index 0000000..a348248
 --- /dev/null
-+++ b/cloudops/api/src/azure-credential.js
++++ b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/azure-credential.js
 @@ -0,0 +1,5 @@
 +const { ManagedIdentityCredential } = require("@azure/identity");
 +
 +const credential = new ManagedIdentityCredential();
 +
 +module.exports = { credential };
-diff --git a/cloudops/api/src/functions/chat.js b/cloudops/api/src/functions/chat.js
+diff --git a/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/functions/chat.js b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/functions/chat.js
 index 5dd9625..bc63f5a 100644
---- a/cloudops/api/src/functions/chat.js
-+++ b/cloudops/api/src/functions/chat.js
+--- a/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/functions/chat.js
++++ b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/functions/chat.js
 @@ -1,14 +1,9 @@
  const { AIProjectClient } = require("@azure/ai-projects");
  const { app } = require("@azure/functions");
@@ -29,10 +29,10 @@ index 5dd9625..bc63f5a 100644
  const project = new AIProjectClient(process.env.FOUNDRY_PROJECT_ENDPOINT, credential);
  const openai = project.getOpenAIClient({
    azureConfig: { allowPreview: true, agentName: process.env.FOUNDRY_AGENT_NAME }
-diff --git a/cloudops/api/src/tools/get-runbook.js b/cloudops/api/src/tools/get-runbook.js
+diff --git a/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/tools/get-runbook.js b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/tools/get-runbook.js
 index e79b88c..23041af 100644
---- a/cloudops/api/src/tools/get-runbook.js
-+++ b/cloudops/api/src/tools/get-runbook.js
+--- a/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/tools/get-runbook.js
++++ b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/tools/get-runbook.js
 @@ -1,6 +1,6 @@
 -const { ClientSecretCredential } = require("@azure/identity");
  const { ContainerClient } = require("@azure/storage-blob");

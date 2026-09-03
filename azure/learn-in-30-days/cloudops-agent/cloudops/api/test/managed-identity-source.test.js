@@ -22,7 +22,7 @@ test("uses one shared managed identity credential for Foundry and Blob Storage",
   assert.equal(
     fs.existsSync(credentialPath),
     true,
-    "Apply patches/day-16-managed-identity.patch to add the shared credential"
+    "Apply the Day 16 managed-identity patch from the repository root"
   );
 
   const credentialSource = readSource("azure-credential.js");

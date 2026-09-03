@@ -32,10 +32,10 @@ API uses `ClientSecretCredential` for Foundry and Blob Storage.
 
 ## Day 16 patch
 
-From this directory, apply the Day 16 learner patch:
+From the root of the cloned `lab-resources` repository, apply the Day 16 learner patch:
 
 ```bash
-git apply patches/day-16-managed-identity.patch
+git apply azure/learn-in-30-days/cloudops-agent/patches/day-16-managed-identity.patch
 ```
 
 The patch replaces the client-secret credentials with one shared
