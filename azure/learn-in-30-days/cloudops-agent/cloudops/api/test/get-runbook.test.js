@@ -2,7 +2,7 @@ const assert = require("node:assert/strict");
 const { Readable } = require("node:stream");
 const test = require("node:test");
 const { ContainerClient } = require("@azure/storage-blob");
-const { getRunbook } = require("../src/tools/get-runbook-authenticated");
+const { getRunbook } = require("../src/tools/get-runbook");
 
 function configureEnvironment(t) {
   const original = {
