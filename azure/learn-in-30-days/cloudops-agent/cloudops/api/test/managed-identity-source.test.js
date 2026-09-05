@@ -17,7 +17,7 @@ function readAllSource(directory) {
   });
 }
 
-test("uses one shared managed identity credential for Foundry and Blob Storage", () => {
+test("uses one shared managed identity credential for Foundry, Blob Storage, and Cosmos DB", () => {
   const credentialPath = path.join(sourceRoot, "azure-credential.js");
   assert.equal(
     fs.existsSync(credentialPath),
@@ -27,11 +27,13 @@ test("uses one shared managed identity credential for Foundry and Blob Storage",
 
   const credentialSource = readSource("azure-credential.js");
   const chatSource = readSource("functions/chat.js");
+  const incidentsSource = readSource("functions/incidents.js");
   const runbookSource = readSource("tools/get-runbook.js");
   const allSource = readAllSource(sourceRoot).join("\n");
 
   assert.match(credentialSource, /new ManagedIdentityCredential\(\)/);
   assert.match(chatSource, /require\("\.\.\/azure-credential"\)/);
+  assert.match(incidentsSource, /require\("\.\.\/azure-credential"\)/);
   assert.match(runbookSource, /require\("\.\.\/azure-credential"\)/);
   assert.equal((allSource.match(/new ManagedIdentityCredential\(/g) || []).length, 1);
   assert.doesNotMatch(
