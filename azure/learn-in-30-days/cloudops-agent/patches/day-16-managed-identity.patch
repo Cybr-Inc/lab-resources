@@ -1,0 +1,55 @@
+diff --git a/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/azure-credential.js b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/azure-credential.js
+new file mode 100644
+index 0000000..a348248
+--- /dev/null
++++ b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/azure-credential.js
+@@ -0,0 +1,5 @@
++const { ManagedIdentityCredential } = require("@azure/identity");
++
++const credential = new ManagedIdentityCredential();
++
++module.exports = { credential };
+diff --git a/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/functions/chat.js b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/functions/chat.js
+index 5dd9625..bc63f5a 100644
+--- a/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/functions/chat.js
++++ b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/functions/chat.js
+@@ -1,14 +1,9 @@
+ const { AIProjectClient } = require("@azure/ai-projects");
+ const { app } = require("@azure/functions");
+-const { ClientSecretCredential } = require("@azure/identity");
++const { credential } = require("../azure-credential");
+ const { getApplicationStatus } = require("../tools/get-application-status");
+ const { getRunbook } = require("../tools/get-runbook");
+ 
+-const credential = new ClientSecretCredential(
+-  process.env.FOUNDRY_TENANT_ID,
+-  process.env.FOUNDRY_CLIENT_ID,
+-  process.env.FOUNDRY_CLIENT_SECRET
+-);
+ const project = new AIProjectClient(process.env.FOUNDRY_PROJECT_ENDPOINT, credential);
+ const openai = project.getOpenAIClient({
+   azureConfig: { allowPreview: true, agentName: process.env.FOUNDRY_AGENT_NAME }
+diff --git a/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/tools/get-runbook.js b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/tools/get-runbook.js
+index e79b88c..23041af 100644
+--- a/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/tools/get-runbook.js
++++ b/azure/learn-in-30-days/cloudops-agent/cloudops/api/src/tools/get-runbook.js
+@@ -1,6 +1,6 @@
+-const { ClientSecretCredential } = require("@azure/identity");
+ const { ContainerClient } = require("@azure/storage-blob");
+ const { StringDecoder } = require("node:string_decoder");
++const { credential } = require("../azure-credential");
+ 
+ const RUNBOOK_FILES = new Map([
+   ["api-503", "customer-api-503.md"],
+@@ -20,11 +20,6 @@ async function getRunbook({ category }) {
+   }
+ 
+   try {
+-    const credential = new ClientSecretCredential(
+-      process.env.FOUNDRY_TENANT_ID,
+-      process.env.FOUNDRY_CLIENT_ID,
+-      process.env.FOUNDRY_CLIENT_SECRET
+-    );
+     const container = new ContainerClient(containerUrl, credential);
+     const response = await container.getBlobClient(fileName).download(0, undefined, {
+       abortSignal: AbortSignal.timeout(5000)

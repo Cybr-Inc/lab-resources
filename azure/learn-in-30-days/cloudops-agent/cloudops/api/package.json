@@ -1,0 +1,18 @@
+{
+  "name": "cloudops-agent-api",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/functions/*.js",
+  "scripts": {
+    "test": "node --test test/get-runbook.test.js",
+    "test:managed-identity": "node --test test/managed-identity-source.test.js",
+    "test:incidents": "node --test test/incident-input.test.js"
+  },
+  "dependencies": {
+    "@azure/ai-projects": "2.5.0",
+    "@azure/cosmos": "4.10.0",
+    "@azure/functions": "4.16.2",
+    "@azure/identity": "4.13.2",
+    "@azure/storage-blob": "12.33.0"
+  }
+}
