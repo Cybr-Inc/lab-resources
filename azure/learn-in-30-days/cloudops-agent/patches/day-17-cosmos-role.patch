@@ -2,7 +2,7 @@ diff --git a/azure/learn-in-30-days/cloudops-agent/iac/day-17/main.bicep b/azure
 index f9d079e..3f3e19d 100644
 --- a/azure/learn-in-30-days/cloudops-agent/iac/day-17/main.bicep
 +++ b/azure/learn-in-30-days/cloudops-agent/iac/day-17/main.bicep
-@@ -80,3 +80,24 @@ resource incidents 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/container
+@@ -80,3 +80,27 @@ resource incidents 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/container
  output accountEndpoint string = cosmos.properties.documentEndpoint
  output accountName string = cosmos.name
  output containerId string = incidents.id
@@ -21,6 +21,9 @@ index f9d079e..3f3e19d 100644
 +resource functionIncidentWriter 'Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2024-11-15' = {
 +  parent: cosmos
 +  name: guid(cosmos.id, functionPrincipalId, dataContributorRole.id, incidentContainerScope)
++  dependsOn: [
++    incidents
++  ]
 +  properties: {
 +    principalId: functionPrincipalId
 +    roleDefinitionId: dataContributorRole.id
