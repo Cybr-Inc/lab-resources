@@ -1,14 +1,10 @@
 const { AIProjectClient } = require("@azure/ai-projects");
 const { app } = require("@azure/functions");
-const { ClientSecretCredential } = require("@azure/identity");
+const { credential } = require("../azure-credential");
+const { isAllowedPrincipal, readPrincipal } = require("../allowed-principal");
 const { getApplicationStatus } = require("../tools/get-application-status");
 const { getRunbook } = require("../tools/get-runbook");
 
-const credential = new ClientSecretCredential(
-  process.env.FOUNDRY_TENANT_ID,
-  process.env.FOUNDRY_CLIENT_ID,
-  process.env.FOUNDRY_CLIENT_SECRET
-);
 const project = new AIProjectClient(process.env.FOUNDRY_PROJECT_ENDPOINT, credential);
 const openai = project.getOpenAIClient({
   azureConfig: { allowPreview: true, agentName: process.env.FOUNDRY_AGENT_NAME }
@@ -18,31 +14,6 @@ const TOOL_HANDLERS = new Map([
   ["get_application_status", getApplicationStatus],
   ["get_runbook", getRunbook]
 ]);
-
-const USERNAME_CLAIM_TYPES = new Set([
-  "preferred_username",
-  "upn",
-  "email",
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress",
-  "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/upn"
-]);
-
-function isAllowedPrincipal(principal) {
-  const allowed = process.env.ALLOWED_USER_NAME?.trim().toLowerCase();
-  if (!allowed) return false;
-
-  const usernames = [];
-  if (typeof principal?.userDetails === "string") {
-    usernames.push(principal.userDetails);
-  }
-  for (const claim of principal?.claims || []) {
-    if (USERNAME_CLAIM_TYPES.has(claim.typ) && typeof claim.val === "string") {
-      usernames.push(claim.val);
-    }
-  }
-
-  return usernames.some((username) => username.trim().toLowerCase() === allowed);
-}
 
 const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
@@ -116,12 +87,11 @@ app.http("chat", {
   methods: ["POST"],
   authLevel: "anonymous",
   handler: async (request, context) => {
-    const encodedPrincipal = request.headers.get("x-ms-client-principal");
-    if (!encodedPrincipal) {
+    const principal = readPrincipal(request);
+    if (!principal) {
       return { status: 401, jsonBody: { error: "Authentication required" } };
     }
 
-    const principal = JSON.parse(Buffer.from(encodedPrincipal, "base64").toString("utf8"));
     if (!isAllowedPrincipal(principal)) {
       return {
         status: 403,

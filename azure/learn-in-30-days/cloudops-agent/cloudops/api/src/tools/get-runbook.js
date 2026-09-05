@@ -1,6 +1,6 @@
-const { ClientSecretCredential } = require("@azure/identity");
 const { ContainerClient } = require("@azure/storage-blob");
 const { StringDecoder } = require("node:string_decoder");
+const { credential } = require("../azure-credential");
 
 const RUNBOOK_FILES = new Map([
   ["api-503", "customer-api-503.md"],
@@ -20,11 +20,6 @@ async function getRunbook({ category }) {
   }
 
   try {
-    const credential = new ClientSecretCredential(
-      process.env.FOUNDRY_TENANT_ID,
-      process.env.FOUNDRY_CLIENT_ID,
-      process.env.FOUNDRY_CLIENT_SECRET
-    );
     const container = new ContainerClient(containerUrl, credential);
     const response = await container.getBlobClient(fileName).download(0, undefined, {
       abortSignal: AbortSignal.timeout(5000)
