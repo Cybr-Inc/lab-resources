@@ -1,4 +1,3 @@
-# The same Cosmos DB deployment as the Day 17 Bicep starter, using AzureRM.
 # The resource group already exists and is not managed by this configuration.
 
 variable "resource_group_name" {

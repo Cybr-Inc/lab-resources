@@ -4,7 +4,7 @@
   "private": true,
   "main": "src/functions/*.js",
   "scripts": {
-    "test": "node --test test/get-runbook.test.js test/configure-agent-auth.test.js",
+    "test": "node --test test/get-runbook.test.js test/configure-agent-auth.test.js test/allowed-principal.test.js",
     "test:managed-identity": "node --test test/managed-identity-source.test.js",
     "test:incidents": "node --test test/incident-input.test.js"
   },
