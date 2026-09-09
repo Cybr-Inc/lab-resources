@@ -9,17 +9,20 @@ The group and Function already exist. This configuration does not manage them.
 
 ## Files
 
-- `provider.tf` selects AzAPI 2.7.0 and Azure CLI authentication.
+- `provider.tf` selects AzureRM 5.2.0 and Azure CLI authentication.
 - `main.tf` defines the three starter resources and their outputs.
 - `permission.tf.example` contains the missing data-role assignment for the repair task.
 
 Terraform loads `.tf` files in the current directory. The `.example` suffix keeps the repair inactive until the learner copies it to `permission.tf`.
 
-## Provider choice
+## AzureRM provider
 
-AzAPI uses the same Azure resource types, API versions, and properties as the Bicep starter.
-AzureRM 5.2.0 reads Cosmos account keys and connection strings during resource refresh.
-The sandbox learner role excludes those operations. AzAPI preserves that permission boundary.
+AzureRM supplies resource types for the Cosmos DB account, SQL database, SQL container, and SQL role assignment.
+The configuration uses their Terraform arguments. The provider selects the Azure API versions.
+
+AzureRM 5.2.0 reads Cosmos account keys and connection strings during resource refresh and stores them in state.
+The learner role permits those reads within the data resource group. It excludes key regeneration.
+Local authentication remains disabled, and the Function uses managed identity for incident access.
 
 The starter uses standard Terraform planning, state, dependencies, and cleanup.
 It does not submit a Bicep or ARM template deployment.

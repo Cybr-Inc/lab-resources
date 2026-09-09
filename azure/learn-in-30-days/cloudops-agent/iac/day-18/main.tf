@@ -1,8 +1,8 @@
-# The same Cosmos DB resources and API versions as the Day 17 Bicep starter.
+# The same Cosmos DB deployment as the Day 17 Bicep starter, using AzureRM.
 # The resource group already exists and is not managed by this configuration.
 
-variable "resource_group_id" {
-  description = "Resource ID of the existing learner data resource group."
+variable "resource_group_name" {
+  description = "Name of the existing learner data resource group."
   type        = string
 }
 
@@ -34,79 +34,61 @@ locals {
   }
 }
 
-resource "azapi_resource" "cosmos" {
-  type      = "Microsoft.DocumentDB/databaseAccounts@2024-11-15"
-  name      = var.account_name
-  parent_id = var.resource_group_id
-  location  = var.location
-  tags      = local.common_tags
+resource "azurerm_cosmosdb_account" "cosmos" {
+  name                = var.account_name
+  resource_group_name = var.resource_group_name
+  location            = var.location
+  offer_type          = "Standard"
+  kind                = "GlobalDocumentDB"
 
-  body = {
-    kind = "GlobalDocumentDB"
-    properties = {
-      capabilities = [{ name = "EnableServerless" }]
-      consistencyPolicy = {
-        defaultConsistencyLevel = "Session"
-      }
-      databaseAccountOfferType           = "Standard"
-      disableKeyBasedMetadataWriteAccess = true
-      disableLocalAuth                   = true
-      enableAutomaticFailover            = false
-      enableMultipleWriteLocations       = false
-      locations = [{
-        failoverPriority = 0
-        isZoneRedundant  = false
-        locationName     = var.location
-      }]
-      minimalTlsVersion   = "Tls12"
-      publicNetworkAccess = "Enabled"
-    }
+  local_authentication_enabled       = false
+  access_key_metadata_writes_enabled = false
+  automatic_failover_enabled         = false
+  multiple_write_locations_enabled   = false
+  minimal_tls_version                = "Tls12"
+  public_network_access_enabled      = true
+
+  capabilities {
+    name = "EnableServerless"
   }
 
-  response_export_values = ["properties.documentEndpoint"]
+  consistency_policy {
+    consistency_level = "Session"
+  }
+
+  geo_location {
+    location          = var.location
+    failover_priority = 0
+    zone_redundant    = false
+  }
+
+  tags = local.common_tags
 }
 
-resource "azapi_resource" "database" {
-  type      = "Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2024-11-15"
-  name      = local.database_name
-  parent_id = azapi_resource.cosmos.id
-
-  body = {
-    properties = {
-      resource = {
-        id = local.database_name
-      }
-    }
-  }
+resource "azurerm_cosmosdb_sql_database" "database" {
+  name                = local.database_name
+  resource_group_name = var.resource_group_name
+  account_name        = azurerm_cosmosdb_account.cosmos.name
 }
 
-resource "azapi_resource" "incidents" {
-  type      = "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2024-11-15"
-  name      = local.container_name
-  parent_id = azapi_resource.database.id
-
-  body = {
-    properties = {
-      resource = {
-        id = local.container_name
-        partitionKey = {
-          kind    = "Hash"
-          paths   = ["/severity"]
-          version = 2
-        }
-      }
-    }
-  }
+resource "azurerm_cosmosdb_sql_container" "incidents" {
+  name                  = local.container_name
+  resource_group_name   = var.resource_group_name
+  account_name          = azurerm_cosmosdb_account.cosmos.name
+  database_name         = azurerm_cosmosdb_sql_database.database.name
+  partition_key_kind    = "Hash"
+  partition_key_paths   = ["/severity"]
+  partition_key_version = 2
 }
 
 output "account_endpoint" {
-  value = azapi_resource.cosmos.output.properties.documentEndpoint
+  value = azurerm_cosmosdb_account.cosmos.endpoint
 }
 
 output "account_name" {
-  value = azapi_resource.cosmos.name
+  value = azurerm_cosmosdb_account.cosmos.name
 }
 
 output "container_id" {
-  value = azapi_resource.incidents.id
+  value = azurerm_cosmosdb_sql_container.incidents.id
 }

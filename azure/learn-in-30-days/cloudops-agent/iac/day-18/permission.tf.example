@@ -4,27 +4,23 @@ variable "function_principal_id" {
 }
 
 locals {
-  data_contributor_role_id = "${azapi_resource.cosmos.id}/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002"
-  incident_container_scope = "${azapi_resource.cosmos.id}/dbs/${local.database_name}/colls/${local.container_name}"
+  data_contributor_role_id = "${azurerm_cosmosdb_account.cosmos.id}/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002"
+  incident_container_scope = "${azurerm_cosmosdb_account.cosmos.id}/dbs/${local.database_name}/colls/${local.container_name}"
 }
 
-resource "azapi_resource" "function_incident_writer" {
-  type      = "Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2024-11-15"
-  parent_id = azapi_resource.cosmos.id
+resource "azurerm_cosmosdb_sql_role_assignment" "function_incident_writer" {
+  resource_group_name = var.resource_group_name
+  account_name        = azurerm_cosmosdb_account.cosmos.name
   name = uuidv5("url", join("|", [
-    azapi_resource.cosmos.id,
+    azurerm_cosmosdb_account.cosmos.id,
     var.function_principal_id,
     local.data_contributor_role_id,
     local.incident_container_scope,
   ]))
 
-  depends_on = [azapi_resource.incidents]
+  depends_on = [azurerm_cosmosdb_sql_container.incidents]
 
-  body = {
-    properties = {
-      principalId      = var.function_principal_id
-      roleDefinitionId = local.data_contributor_role_id
-      scope            = local.incident_container_scope
-    }
-  }
+  principal_id       = var.function_principal_id
+  role_definition_id = local.data_contributor_role_id
+  scope              = local.incident_container_scope
 }
