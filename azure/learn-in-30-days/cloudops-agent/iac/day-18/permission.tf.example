@@ -1,0 +1,30 @@
+variable "function_principal_id" {
+  description = "Object ID of the existing Function App managed identity."
+  type        = string
+}
+
+locals {
+  data_contributor_role_id = "${azapi_resource.cosmos.id}/sqlRoleDefinitions/00000000-0000-0000-0000-000000000002"
+  incident_container_scope = "${azapi_resource.cosmos.id}/dbs/${local.database_name}/colls/${local.container_name}"
+}
+
+resource "azapi_resource" "function_incident_writer" {
+  type      = "Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments@2024-11-15"
+  parent_id = azapi_resource.cosmos.id
+  name = uuidv5("url", join("|", [
+    azapi_resource.cosmos.id,
+    var.function_principal_id,
+    local.data_contributor_role_id,
+    local.incident_container_scope,
+  ]))
+
+  depends_on = [azapi_resource.incidents]
+
+  body = {
+    properties = {
+      principalId      = var.function_principal_id
+      roleDefinitionId = local.data_contributor_role_id
+      scope            = local.incident_container_scope
+    }
+  }
+}
