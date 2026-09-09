@@ -2,13 +2,36 @@ const { execFileSync } = require("node:child_process");
 const definition = require("../agent/definition");
 
 const endpoint = process.env.FOUNDRY_PROJECT_ENDPOINT?.replace(/\/$/, "");
-if (!endpoint) {
-  console.error("FOUNDRY_PROJECT_ENDPOINT is required.");
-  process.exit(1);
-}
 
-function getToken() {
-  return execFileSync(
+async function getToken({
+  env = process.env,
+  fetchImpl = fetch,
+  execFile = execFileSync
+} = {}) {
+  if (env.ARM_CLIENT_ID && env.ARM_CLIENT_SECRET && env.ARM_TENANT_ID) {
+    const body = new URLSearchParams({
+      client_id: env.ARM_CLIENT_ID,
+      client_secret: env.ARM_CLIENT_SECRET,
+      grant_type: "client_credentials",
+      scope: "https://ai.azure.com/.default"
+    });
+    const response = await fetchImpl(
+      `https://login.microsoftonline.com/${env.ARM_TENANT_ID}/oauth2/v2.0/token`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Token request failed with HTTP ${response.status}`);
+    }
+    const token = (await response.json()).access_token;
+    if (!token) throw new Error("Token response did not include an access token.");
+    return token;
+  }
+
+  return execFile(
     "az",
     [
       "account",
@@ -25,9 +48,11 @@ function getToken() {
 }
 
 async function configureAgent() {
+  if (!endpoint) throw new Error("FOUNDRY_PROJECT_ENDPOINT is required.");
+
   const retryable = new Set([403, 404, 409, 429, 500, 502, 503]);
   for (let attempt = 1; attempt <= 8; attempt += 1) {
-    const token = getToken();
+    const token = await getToken();
     const headers = { Authorization: `Bearer ${token}` };
     const agentUrl = `${endpoint}/agents/${encodeURIComponent(definition.agentName)}`;
     const existing = await fetch(`${agentUrl}?api-version=v1`, { headers });
@@ -76,7 +101,11 @@ async function configureAgent() {
   }
 }
 
-configureAgent().catch((error) => {
-  console.error(error.message);
-  process.exit(1);
-});
+if (require.main === module) {
+  configureAgent().catch((error) => {
+    console.error(error.message);
+    process.exit(1);
+  });
+}
+
+module.exports = { getToken };
