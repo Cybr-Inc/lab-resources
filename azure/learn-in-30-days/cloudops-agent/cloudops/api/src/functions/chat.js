@@ -95,7 +95,9 @@ app.http("chat", {
     if (!isAllowedPrincipal(principal)) {
       return {
         status: 403,
-        jsonBody: { error: "The signed-in Microsoft account does not match the lab account" }
+        jsonBody: {
+          error: "This app is signed in with a different Microsoft account. Sign out, then use the lab username."
+        }
       };
     }
 
