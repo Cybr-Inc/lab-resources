@@ -34,7 +34,7 @@ resource "azurerm_private_endpoint" "cosmos" {
 
   private_service_connection {
     name                           = "cosmos-sql"
-    private_connection_resource_id = azurerm_cosmosdb_account.cosmos.id
+    private_connection_resource_id = local.cosmos_account_id
     subresource_names              = ["Sql"]
     is_manual_connection           = false
   }

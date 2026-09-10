@@ -1,0 +1,20 @@
+# Copy to block-public.tf after the private endpoint and DNS exist.
+# This updates one property of the existing account, without importing it.
+resource "azapi_update_resource" "cosmos_public_access" {
+  type        = "Microsoft.DocumentDB/databaseAccounts@2024-11-15"
+  resource_id = local.cosmos_account_id
+
+  body = {
+    properties = {
+      publicNetworkAccess = "Disabled"
+    }
+  }
+
+  depends_on = [
+    azurerm_private_endpoint.cosmos,
+    azurerm_private_dns_zone_virtual_network_link.cosmos,
+  ]
+}
+
+# Destroy removes this update record from state but leaves the property Disabled.
+# The platform removes the existing database when the sandbox ends.

@@ -6,3 +6,4 @@
 *.tfvars.json
 crash.log
 private-access.tf
+block-public.tf

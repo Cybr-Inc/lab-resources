@@ -5,7 +5,16 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "= 5.2.0"
     }
+    azapi = {
+      source  = "Azure/azapi"
+      version = "= 2.8.0"
+    }
   }
+}
+
+provider "azapi" {
+  use_cli                    = true
+  skip_provider_registration = true
 }
 
 provider "azurerm" {
