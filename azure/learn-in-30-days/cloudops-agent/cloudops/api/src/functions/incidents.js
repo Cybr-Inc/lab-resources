@@ -14,6 +14,8 @@ function getContainer() {
 }
 
 function authorize(request) {
+  if (process.env.INCIDENTS_PUBLIC_DEMO === "true") return null;
+
   const principal = readPrincipal(request);
   if (!principal) {
     return { status: 401, jsonBody: { error: "Authentication required" } };
