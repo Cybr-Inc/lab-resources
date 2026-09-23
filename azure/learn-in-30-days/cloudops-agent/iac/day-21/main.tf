@@ -1,5 +1,5 @@
 # =============================================================================
-# Proposed CloudOps release: incident history.
+# Proposed CloudOps release: incident history and runbook storage.
 #
 # This file is a review draft. It has not been deployed. Several settings break
 # the organization's infrastructure requirements, which are listed in the lab
@@ -14,11 +14,54 @@ variable "function_principal_id" {
   type        = string
 }
 
-# --- Incident history ---------------------------------------------------------
+# --- Runbook storage ----------------------------------------------------------
 
 # Requirement: CloudOps resources must use the eastus region.
-# VIOLATION: this Cosmos DB account uses an unapproved region.
-#
+# VIOLATION: this storage account uses an unapproved region.
+resource "azurerm_storage_account" "cloudops" {
+  name                            = "cloudopsrunbooks"
+  resource_group_name             = "rg-cloudops"
+  location                        = "westus"
+  account_tier                    = "Standard"
+  account_replication_type        = "GRS"
+  min_tls_version                 = "TLS1_2"
+  public_network_access_enabled   = false
+  allow_nested_items_to_be_public = false
+
+  # VIOLATION: account-key authorization must be disabled.
+  shared_access_key_enabled = true
+
+  # VIOLATION: blob soft delete needs a seven-day retention policy here.
+
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [data.azurerm_user_assigned_identity.storage_encryption.id]
+  }
+
+  customer_managed_key {
+    key_vault_key_id          = data.azurerm_key_vault_key.storage.id
+    user_assigned_identity_id = data.azurerm_user_assigned_identity.storage_encryption.id
+  }
+
+  depends_on = [azurerm_role_assignment.storage_encryption]
+}
+
+# VIOLATION: runbooks must not allow anonymous Blob access.
+resource "azurerm_storage_container" "runbooks" {
+  name                  = "operational-runbooks"
+  storage_account_name  = azurerm_storage_account.cloudops.name
+  container_access_type = "blob"
+}
+
+# This container already uses private access.
+resource "azurerm_storage_container" "archives" {
+  name                  = "archives"
+  storage_account_name  = azurerm_storage_account.cloudops.name
+  container_access_type = "private"
+}
+
+# --- Incident history ---------------------------------------------------------
+
 # Requirement: Cosmos DB must use identity-based access only.
 # VIOLATION: local (key-based) authentication is enabled.
 #
@@ -27,7 +70,7 @@ variable "function_principal_id" {
 resource "azurerm_cosmosdb_account" "incident_history" {
   name                               = "cosmoscloudops"
   resource_group_name                = "rg-cloudops"
-  location                           = "westus"
+  location                           = "eastus"
   offer_type                         = "Standard"
   kind                               = "GlobalDocumentDB"
   local_authentication_disabled      = false
@@ -44,7 +87,7 @@ resource "azurerm_cosmosdb_account" "incident_history" {
   }
 
   geo_location {
-    location          = "westus"
+    location          = "eastus"
     failover_priority = 0
   }
 }

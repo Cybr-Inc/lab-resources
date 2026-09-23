@@ -1,9 +1,13 @@
 # Checkov configuration for the Day 21 review.
 #
-# This exercise reviews Cosmos DB access controls, region, and role scope.
-# Cosmos DB encrypts data at rest with Microsoft-managed keys by default.
-# Customer-managed keys are a separate key-management requirement.
+# Exceptions for the Day 21 source review.
 
 skip-check:
-  # This exercise uses default encryption, not customer-managed keys.
+  # Existing exception: the application uses Blob storage, not queues.
+  - CKV_AZURE_33
+  # Existing exception: Cosmos DB uses default Microsoft-managed encryption.
   - CKV_AZURE_100
+  # Scanner limitation: this rule only recognizes legacy storage insights.
+  # supporting.tf configures real Blob read/write/delete diagnostic logs.
+  # Both pip-installed versions 3.2.490 and 3.3.19 have this limitation.
+  - CKV2_AZURE_21
