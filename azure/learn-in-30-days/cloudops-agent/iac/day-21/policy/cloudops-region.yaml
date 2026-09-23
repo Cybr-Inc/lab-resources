@@ -1,0 +1,14 @@
+---
+metadata:
+  id: "CKV2_CUSTOM_1"
+  name: "CloudOps resources must use the eastus region"
+  category: "GENERAL_SECURITY"
+  severity: "HIGH"
+definition:
+  cond_type: "attribute"
+  resource_types:
+    - "azurerm_storage_account"
+    - "azurerm_cosmosdb_account"
+  attribute: "location"
+  operator: "equals"
+  value: "eastus"

@@ -1,0 +1,13 @@
+---
+metadata:
+  id: "CKV2_CUSTOM_2"
+  name: "Cosmos data-role assignments must be scoped to the incidents container"
+  category: "IAM"
+  severity: "HIGH"
+definition:
+  cond_type: "attribute"
+  resource_types:
+    - "azurerm_cosmosdb_sql_role_assignment"
+  attribute: "scope"
+  operator: "ending_with"
+  value: "/dbs/cloudops/colls/incidents"
