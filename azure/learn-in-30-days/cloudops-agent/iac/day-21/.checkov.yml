@@ -1,14 +1,9 @@
 # Checkov configuration for the Day 21 review.
 #
-# The organization's five infrastructure requirements map to a small set of
-# checks. Two additional checks are out of scope for this review, so we skip
-# them with the reasons below. Skipping a check is a recorded team decision,
-# not a way to hide a failure.
+# This exercise reviews Cosmos DB access controls, region, and role scope.
+# Cosmos DB encrypts data at rest with Microsoft-managed keys by default.
+# Customer-managed keys are a separate key-management requirement.
 
 skip-check:
-  # Storage queue logging is not part of this runbook review. The organization
-  # covers it in a separate logging standard.
-  - CKV_AZURE_33
-  # Customer-managed keys require a Key Vault that this proposed change does not
-  # yet include. Key management is reviewed in a later hardening task.
+  # This exercise uses default encryption, not customer-managed keys.
   - CKV_AZURE_100

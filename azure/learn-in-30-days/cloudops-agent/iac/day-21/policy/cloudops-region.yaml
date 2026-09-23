@@ -7,7 +7,6 @@ metadata:
 definition:
   cond_type: "attribute"
   resource_types:
-    - "azurerm_storage_account"
     - "azurerm_cosmosdb_account"
   attribute: "location"
   operator: "equals"
